@@ -1,0 +1,41 @@
+version: '3.1'
+services:
+  db:
+    image: postgres:13.1
+    privileged: true
+    ports:
+      - 5432:5432
+    environment:
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: 12345qwe
+        POSTGRES_DB: db
+
+  backend:
+    build: ./backend
+    privileged: true
+    expose:
+      - 8080
+    command:
+      bash -c "
+      ./wait-for-postgres.sh db
+      python3 manage.py migrate &&
+      python3 manage.py create_users 20 &&
+      python3 manage.py create_transactions 200 &&
+      gunicorn test_project_stilsoft.wsgi -b 0.0.0.0:8080
+      "
+    depends_on:
+      - db
+
+  nginx:
+    build: ./ngnix
+    ports:
+      - 8000:80
+    depends_on:
+      - backend
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 80:80
+    depends_on:
+      - nginx
