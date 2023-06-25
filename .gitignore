@@ -56,7 +56,7 @@ pip-selfcheck.json
 # *.ipr
 
 # CMake
-cmake-build-*/
+#cmake-build-*/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
@@ -82,14 +82,14 @@ atlassian-ide-plugin.xml
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
-crashlytics-build.properties
+#crashlytics-build.properties
 fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
 
 # Android studio 3.1+ serialized cache file
-.idea/caches/build_file_checksums.ser
+#.idea/caches/build_file_checksums.ser
 
 ### Python template
 # Byte-compiled / optimized / DLL files
@@ -102,7 +102,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+#build/
 develop-eggs/
 dist/
 downloads/
@@ -163,7 +163,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+#docs/_build/
 
 # PyBuilder
 .pybuilder/
