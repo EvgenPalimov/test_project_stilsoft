@@ -25,3 +25,5 @@ class Transaction(models.Model):
                                         auto_now_add=True)
     date_updated = models.DateTimeField(verbose_name='Date of update',
                                         auto_now=True)
+
+

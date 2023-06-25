@@ -6,11 +6,13 @@ from rest_framework.viewsets import ViewSet
 from transactions.models import Transaction
 from transactions.serializers import TransactionModelSerializer, \
     TransactionBaseModelSerializer
+from users.models import User
 
 
 # Create your views here.
 class TransactionViewSet(ViewSet, GenericAPIView):
     queryset = Transaction.objects.filter(on_delete=False)
+    ordering = '-date_created'
 
     def get_serializer_class(self):
         if self.request.method in ['GET']:
@@ -19,12 +21,16 @@ class TransactionViewSet(ViewSet, GenericAPIView):
 
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(
-            Transaction.objects.filter(on_delete=False),
+            Transaction.objects.filter(on_delete=False).
+            order_by('-date_created'),
             many=True)
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        data = request.data
+        user = User.objects.get(username=data['user'])
+        data['user'] = user.id
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         try:
             self.perform_create(serializer)
@@ -45,7 +51,10 @@ class TransactionViewSet(ViewSet, GenericAPIView):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.queryset.get(pk=kwargs['pk'])
-        serializer = self.get_serializer(instance, data=request.data,
+        data = request.data
+        user = User.objects.get(username=data['user'])
+        data['user'] = user.id
+        serializer = self.get_serializer(instance, data=data,
                                          partial=partial)
         serializer.is_valid(raise_exception=True)
         try:
